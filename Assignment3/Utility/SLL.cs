@@ -275,52 +275,52 @@ namespace Assignment3.Utility
         }
 
         public void Sort()
-{
-    if (head == null || head.Next == null)
-    {
-        return; // The list is empty or has only one element, so it's already sorted.
-    }
-
-    bool wasChanged;
-    do
-    {
-        Node current = head;
-        Node previous = null;
-        Node next = head.Next;
-        wasChanged = false;
-
-        while (next != null)
         {
-            if (current.Data.Name.CompareTo(next.Data.Name) > 0)
+            if (head == null || head.Next == null)
             {
-                wasChanged = true;
-
-                if (previous != null)
-                {
-                    Node temp = next.Next;
-                    previous.Next = next;
-                    next.Next = current;
-                    current.Next = temp;
-                }
-                else
-                {
-                    Node temp = next.Next;
-                    head = next;
-                    next.Next = current;
-                    current.Next = temp;
-                }
-
-                previous = next;
-                next = current.Next;
+                return; // The list is empty or has only one element, so it's already sorted.
             }
-            else
+
+            bool wasChanged;
+            do
             {
-                previous = current;
-                current = next;
-                next = next.Next;
-            }
-        }
-    } while (wasChanged);
+                Node current = head;
+                Node previous = null;
+                Node next = head.Next;
+                wasChanged = false;
+
+                while (next != null)
+                {
+                    if (current.Data.Name.CompareTo(next.Data.Name) > 0)
+                    {
+                        wasChanged = true;
+
+                        if (previous != null)
+                        {
+                            Node temp = next.Next;
+                            previous.Next = next;
+                            next.Next = current;
+                            current.Next = temp;
+                        }
+                        else
+                        {
+                            Node temp = next.Next;
+                            head = next;
+                            next.Next = current;
+                            current.Next = temp;
+                        }
+
+                        previous = next;
+                        next = current.Next;
+                    }
+                    else
+                    {
+                        previous = current;
+                        current = next;
+                        next = next.Next;
+                    }
+                }
+            } while (wasChanged);
 }
 /*
         public void Join(params SLL[] lists)

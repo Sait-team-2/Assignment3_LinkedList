@@ -6,8 +6,9 @@ namespace Assignment3.Tests
 {
     public class SerializationTests
     {
-        private ILinkedListADT users;
+        private SLL users;
         private readonly string testFileName = "test_users.bin";
+        private User testAdd = new User(1, "Adrian Capuno", "acapuno@gmail.com", "password");
 
         [SetUp]
         public void Setup()
@@ -87,8 +88,6 @@ namespace Assignment3.Tests
             ILinkedListADT testuser;
             testuser = new SLL();
 
-            User testAdd = new User(1, "Adrian Capuno", "acapuno@gmail.com", "password");
-
             testuser.AddFirst(testAdd);
             Assert.AreEqual(testAdd, testuser.GetValue(0));
         }
@@ -96,8 +95,6 @@ namespace Assignment3.Tests
         [Test]
         public void Prepend_AddsItemToFrontOfList()
         {
-            User testAdd = new User(1, "Adrian Capuno", "acapuno@gmail.com", "password");
-
             SerializationHelper.SerializeUsers(users, testFileName);
             users.Add(testAdd, 0);
             User actual = users.GetValue(0);
@@ -108,8 +105,6 @@ namespace Assignment3.Tests
         [Test]
         public void Append_AddsItemToEndOfList()
         {
-            User testAdd = new User(1, "Adrian Capuno", "acapuno@gmail.com", "password");
-
             users.AddLast(testAdd);
             Assert.AreEqual(testAdd, users.GetValue(users.Count()-1));
         }
@@ -171,8 +166,6 @@ namespace Assignment3.Tests
         [TestCase(2)]      
         public void InsertAt_InsertsItemAtSpecificIndex(int index)
         {
-            User testAdd = new User(1, "Adrian Capuno", "acapuno@gmail.com", "password");
-
             SerializationHelper.SerializeUsers(users, testFileName);
             users.Add(testAdd, index);
 
@@ -197,8 +190,6 @@ namespace Assignment3.Tests
         [Test]
         public void Contains_ReturnsTrueIfItemExists()
         {
-            User testAdd = new User(1, "Adrian Capuno", "acapuno@gmail.com", "password");
-
             users.AddLast(testAdd);
             Assert.IsTrue(users.Contains(testAdd));
         }
@@ -216,7 +207,6 @@ namespace Assignment3.Tests
         public void IsEmpty_AfterAddingItem_ReturnsFalse()
         {
             users.Clear();
-            User testAdd = new User(1, "Adrian Capuno", "acapuno@gmail.com", "password");
             users.AddLast(testAdd);
             Assert.IsFalse(users.IsEmpty(), "List should not be empty after adding an item.");
         }
@@ -233,5 +223,64 @@ namespace Assignment3.Tests
             Assert.AreEqual(deserializedUsers.GetValue(0), users.GetValue(0), "Getvalue should return value of first item.");
         }
 
+        [Test]
+        public void Reverse_EmptyList_KeepsEmpty()
+        {
+            var list = new SLL();
+            list.Reverse();
+            Assert.IsTrue(list.IsEmpty());
+        }
+
+        [Test]
+        public void Reverse_SingleElementList_KeepsSame()
+        {
+            var list = new SLL();
+            list.AddLast(testAdd);
+            list.Sort();
+            Assert.AreEqual("Adrian Capuno", list.GetValue(0).Name);
+        }
+
+        [Test]
+        public void Reverse_MultipleElements_ReversesList()
+        {
+
+            SerializationHelper.SerializeUsers(users, testFileName);
+            SLL deserializedUsers = SerializationHelper.DeserializeUsers(testFileName);
+
+            users.Reverse();
+
+            User expected = users.GetValue(0);
+            User actual = deserializedUsers.GetValue(users.Count()-1);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void Sort_EmptyList_KeepsEmpty()
+        {
+            var list = new SLL();
+            list.Sort();
+            Assert.IsTrue(list.IsEmpty());
+        }
+
+        [Test]
+        public void Sort_SingleElementList_KeepsSame()
+        {
+            var list = new SLL();
+
+            list.AddLast(testAdd);
+            list.Sort();
+            Assert.AreEqual("Adrian Capuno", list.GetValue(0).Name);
+        }
+
+        [Test]
+        public void Sort_MultipleElements_SortsList()
+        {
+            users.Sort();
+
+            User expected = users.GetValue(0);
+
+            Assert.AreEqual("Colonel Sanders", expected.Name);
+        }
     }
 }
